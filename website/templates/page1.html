@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" 
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:xd_Signature msdt:dt="string"></mso:xd_Signature>
+<mso:display_urn_x003a_schemas-microsoft-com_x003a_office_x003a_office_x0023_Editor msdt:dt="string">Katy Long</mso:display_urn_x003a_schemas-microsoft-com_x003a_office_x003a_office_x0023_Editor>
+<mso:Order msdt:dt="string">5379300.00000000</mso:Order>
+<mso:xd_ProgID msdt:dt="string"></mso:xd_ProgID>
+<mso:_ExtendedDescription msdt:dt="string"></mso:_ExtendedDescription>
+<mso:display_urn_x003a_schemas-microsoft-com_x003a_office_x003a_office_x0023_Author msdt:dt="string">Katy Long</mso:display_urn_x003a_schemas-microsoft-com_x003a_office_x003a_office_x0023_Author>
+<mso:ComplianceAssetId msdt:dt="string"></mso:ComplianceAssetId>
+<mso:TemplateUrl msdt:dt="string"></mso:TemplateUrl>
+<mso:ContentTypeId msdt:dt="string">0x0101006776E503C93961438855067381508F60</mso:ContentTypeId>
+<mso:TriggerFlowInfo msdt:dt="string"></mso:TriggerFlowInfo>
+<mso:_SourceUrl msdt:dt="string"></mso:_SourceUrl>
+<mso:_SharedFileIndex msdt:dt="string"></mso:_SharedFileIndex>
+<mso:TaxCatchAll msdt:dt="string"></mso:TaxCatchAll>
+<mso:MediaServiceImageTags msdt:dt="string"></mso:MediaServiceImageTags>
+<mso:lcf76f155ced4ddcb4097134ff3c332f msdt:dt="string"></mso:lcf76f155ced4ddcb4097134ff3c332f>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+
+<body>
+    <div>
+        <h1>To Do List</h1>
+        {% if message %}
+        {{ message }}
+        {% endif %}
+<hr>
+        <form action="/add" method="post">
+            <div>
+                <label>To do task</label>
+                <input type="text" name="task" placeholder="Enter a Task">
+                <button type="submit">Add a Task</button>
+            </div>
+        </form>
+
+        <hr>
+
+{% for todo in todo_list %}
+    <div>
+        <form action="/update/{{ todo.id }}" method="post">
+            <p>{{ todo.id }}: {{ todo.task }}</p>
+            <p>Created on: {{ todo.date_created.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            {% if todo.complete == False %}
+            <p> Task Incomplete. <button type="submit">Mark as completed</button></p>
+            {% else %}
+            <p> Task Completed. <button type="submit">Mark as incomplete</button></p>
+            {% endif %}            
+        </form>
+        <p><a href="/edit/{{ todo.id }}">Edit Task</a> | <a href="/delete/{{ todo.id }}">Delete Task</a></p>
+    </div>
+{% endfor %}
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+<body>
+    <h1>Edit Task</h1>
+    <form action="/edit/{{ todo.id }}" method="post">
+        <div>
+            <label>New Task Description</label>
+            <input type="text" name="new_task" value="{{ todo.task }}">
+            <button type="submit">Update Task</button>
+        </div>
+    </form>
+</body>
