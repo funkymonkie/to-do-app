@@ -8,6 +8,8 @@ from flask import (
 )
 from .models import Todo
 from . import db
+from datetime import datetime
+
 
 my_view = Blueprint("my_view", __name__)
 
@@ -37,9 +39,28 @@ def add():
 def update(todo_id):
     if request.method == "POST":
         todo = Todo.query.filter_by(id=todo_id).first()
-        todo.complete = not todo.complete
+
+        if todo.complete:
+            mark_incomplete(todo)
+        else:
+            mark_complete(todo)
+
         db.session.commit()
         return redirect(url_for("my_view.home"))
+
+    # Handle GET request if needed
+    todo = Todo.query.filter_by(id=todo_id).first()
+    return render_template("edit.html", todo=todo)
+
+
+def mark_complete(todo):
+    todo.complete = True
+    todo.date_completed = datetime.utcnow()
+
+
+def mark_incomplete(todo):
+    todo.complete = False
+    todo.date_completed = None  # Reset the date_completed when marked incomplete
 
 
 @my_view.route("/edit/<todo_id>")

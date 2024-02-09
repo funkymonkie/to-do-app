@@ -10,37 +10,59 @@
 </head>
 
 <body>
-    <div>
-        <h1>To Do List</h1>
-        {% if message %}
-        {{ message }}
-        {% endif %}
+    <div class="todo-container">
+        <div>
+            <h1>To Do List</h1>
+            {% if message %}
+            {{ message }}
+            {% endif %}
 <hr>
         <form action="/add" method="post">
             <div>
-                <label>To do task</label>
+                <label class="bold_text">To do task</label>
                 <input type="text" name="task" placeholder="Enter a Task">
                 <button type="submit">Add a Task</button>
             </div>
         </form>
 
         <hr>
-
-{% for todo in todo_list %}
-    <div>
-        <form action="/update/{{ todo.id }}" method="post">
-            <p>{{ todo.id }}: {{ todo.task }}</p>
-            <p>Created on: {{ todo.date_created.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-            {% if todo.complete == False %}
-            <p> Task Incomplete. <button type="submit">Mark as completed</button></p>
-            {% else %}
-            <p> Task Completed. <button type="submit">Mark as incomplete</button></p>
-            {% endif %}            
-        </form>
-        <p><a href="/edit/{{ todo.id }}">Edit Task</a> | <a href="/delete/{{ todo.id }}">Delete Task</a></p>
-    </div>
-{% endfor %}
-
+        <div class="todo-container">
+        <div class="incomplete-tasks-column todo-column">
+            <h2>Incomplete Tasks</h2>
+            {% for todo in todo_list %}
+                {% if not todo.complete %}
+                    <div class="incomplete-tasks">
+                        <form action="/update/{{ todo.id }}" method="post">
+                            <p class="bold_text">{{ todo.id }}: {{ todo.task }}</p>
+                            <p class="timestamp">Created: {{ todo.date_created.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                            {% if todo.date_completed %}
+                                <p class="timestamp">Completed: {{ todo.date_completed.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                            {% endif %}
+                            <button type="submit">Mark as complete</button>
+                        </form>
+                        <p><a href="/edit/{{ todo.id }}">Edit Task</a> | <a href="/delete/{{ todo.id }}">Delete Task</a></p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="completed-tasks-column todo-column">
+            <h2>Completed Tasks</h2>
+            {% for todo in todo_list %}
+                {% if todo.complete %}
+                    <div class="completed-tasks">
+                        <form action="/update/{{ todo.id }}" method="post">
+                            <p class="bold_text">{{ todo.id }}: {{ todo.task }}</p>
+                            <p class="timestamp">Created on: {{ todo.date_created.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                            {% if todo.date_completed %}
+                                <p class="timestamp">Completed: {{ todo.date_completed.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                            {% endif %}
+                            <button type="submit">Mark as incomplete</button>
+                        </form>
+                        <p><a href="/edit/{{ todo.id }}">Edit Task</a> | <a href="/delete/{{ todo.id }}">Delete Task</a></p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
 </body>
 
