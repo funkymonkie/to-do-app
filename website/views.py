@@ -1,4 +1,11 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    send_from_directory,
+)
 from .models import Todo
 from . import db
 
@@ -56,3 +63,8 @@ def delete(todo_id):
     db.session.delete(todo)
     db.session.commit()
     return redirect(url_for("my_view.home"))
+
+
+@my_view.route("/static/<path:filename>")
+def static_files(filename):
+    return send_from_directory("static", filename)
